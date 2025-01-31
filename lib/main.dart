@@ -82,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.blue,  // Color for selected icon and text
         unselectedItemColor: Colors.grey, // Color for unselected icon and text
         items: [
-          const BottomNavigationBarItem(
+         BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
