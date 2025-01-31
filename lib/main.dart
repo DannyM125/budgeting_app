@@ -9,6 +9,8 @@ void main() {
 }
 
 class BudgetApp extends StatelessWidget {
+  const BudgetApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +25,8 @@ class BudgetApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -49,12 +53,12 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Add Transfer"),
-          content: Text("Enter transfer details here."),
+          title: const Text("Add Transfer"),
+          content: const Text("Enter transfer details here."),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close"),
+              child: const Text("Close"),
             ),
           ],
         );
@@ -78,22 +82,22 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.blue,  // Color for selected icon and text
         unselectedItemColor: Colors.grey, // Color for unselected icon and text
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.swap_horiz),
             label: 'Transfers',
           ),
           BottomNavigationBarItem(
             icon: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.blue,  // Fill color for the circle
               ),
-              padding: EdgeInsets.all(10),  // Add some padding around the icon
-              child: Icon(
+              padding: const EdgeInsets.all(10),  // Add some padding around the icon
+              child: const Icon(
                 Icons.add,
                 color: Colors.white,  // Make the plus sign white for contrast
                 size: 42,
@@ -101,11 +105,11 @@ class _MainScreenState extends State<MainScreen> {
             ),
             label: '',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
             label: 'Reports',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Account',
           ),
