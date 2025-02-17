@@ -3,6 +3,7 @@ import 'home_page.dart';
 import 'transfers_page.dart';
 import 'reports_page.dart';
 import 'account_page.dart';
+import 'utils/transfer_dialog.dart';
 
 void main() {
   runApp(BudgetApp());
@@ -34,10 +35,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   final Color primaryColor = Colors.blue;
+
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+  DateTime? _selectedDate;
+  String _transactionType = 'Withdrawal';
+
   final List<Widget> _pages = [
     HomePage(),
     TransfersPage(),
-    HomePage(),//this is never actually used just a filler for the array
+    HomePage(), // this is never actually used just a filler for the array
     ReportsPage(),
     AccountPage(),
   ];
@@ -49,19 +56,21 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _showAddTransferDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Add Transfer"),
-          content: const Text("Enter transfer details here."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
-          ],
-        );
+    showAddTransferDialog(
+      context,
+      _amountController,
+      _categoryController,
+      _selectedDate,
+      _transactionType,
+      (newType) {
+        setState(() {
+          _transactionType = newType;
+        });
+      },
+      (newDate) {
+        setState(() {
+          _selectedDate = newDate;
+        });
       },
     );
   }
@@ -74,15 +83,15 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: (index) {
           if (index == 2) {
-            _showAddTransferDialog();
+            _showAddTransferDialog(); // UPDATED HERE
           } else {
             _onItemTapped(index);
           }
         },
-        selectedItemColor: Colors.blue,  // Color for selected icon and text
-        unselectedItemColor: Colors.grey, // Color for unselected icon and text
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         items: [
-         BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
@@ -94,12 +103,12 @@ class _MainScreenState extends State<MainScreen> {
             icon: Container(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue,  // Fill color for the circle
+                color: Colors.blue,
               ),
-              padding: const EdgeInsets.all(10),  // Add some padding around the icon
+              padding: const EdgeInsets.all(10),
               child: const Icon(
                 Icons.add,
-                color: Colors.white,  // Make the plus sign white for contrast
+                color: Colors.white,
                 size: 42,
               ),
             ),
@@ -119,6 +128,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-//TODO  Just make it a floating action button 
-//TODO  with a blank space under it and use claude!
