@@ -71,8 +71,8 @@ class _ReportsPageState extends State<ReportsPage> {
 
             // Title for the top categories list
             const Text(
-              'Top Spending Categories',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Top Spending Categories:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
@@ -82,8 +82,8 @@ class _ReportsPageState extends State<ReportsPage> {
                 itemCount: spendingCategories.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(spendingCategories[index]['category']),
-                    trailing: Text('\$${spendingCategories[index]['amount']}'),
+                    title: Text(spendingCategories[index]['category'], style: TextStyle(fontSize: 20),),
+                    trailing: Text('\$${spendingCategories[index]['amount']}', style: TextStyle(fontSize: 20),),
                   );
                 },
               ),
@@ -103,7 +103,7 @@ class _ReportsPageState extends State<ReportsPage> {
             color: _getCategoryColor(category['category']),
             title: '${category['category']} \n \$${category['amount']}',
             radius: 60,
-            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         )
         .toList();

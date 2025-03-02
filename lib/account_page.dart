@@ -10,6 +10,8 @@ class AccountPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Account'),
         backgroundColor: Colors.white,
+        elevation: 1,
+        foregroundColor: Colors.black,
       ),
       body: const Center(child: Text('Account Page Content')),
     );

@@ -18,7 +18,11 @@ class _TransfersPageState extends State<TransfersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Transfers'), backgroundColor: Colors.white,),
+      appBar: AppBar(title: const Text('Transfers'),         
+      backgroundColor: Colors.white,
+        elevation: 1,
+        foregroundColor: Colors.black,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

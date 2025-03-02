@@ -11,6 +11,8 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         backgroundColor: Colors.white,
+        elevation: 1,
+        foregroundColor: Colors.black,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -79,7 +81,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(15, 30, 15, 30),
                 child: LineChart(
                   LineChartData(
                     gridData: FlGridData(show: false),
