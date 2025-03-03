@@ -107,7 +107,7 @@ class HomePage extends StatelessWidget {
                           const FlSpot(1, 3000),
                           const FlSpot(2, 4000),
                           const FlSpot(3, 4500),
-                          const FlSpot(4, 5000),
+                          const FlSpot(4, 5000), //TODO MEGH JSON STUFF
                         ],
                         isCurved: false,
                         color: Colors.blue,

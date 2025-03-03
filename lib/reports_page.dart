@@ -9,21 +9,20 @@ class ReportsPage extends StatefulWidget {
 }
 
 class _ReportsPageState extends State<ReportsPage> {
-  // Dummy data for spending and income categories
   final List<Map<String, dynamic>> spendingCategories = [
     {'category': 'Food', 'amount': 120},
     {'category': 'Transportation', 'amount': 60},
     {'category': 'Entertainment', 'amount': 80},
     {'category': 'Bills', 'amount': 200},
-  ];
+  ];//TODO MEGH JSON STUFF
 
-  final List<Map<String, dynamic>> incomeCategories = [
+  final List<Map<String, dynamic>> incomeCategories = [ 
     {'category': 'Salary', 'amount': 1000},
     {'category': 'Freelance', 'amount': 300},
     {'category': 'Investments', 'amount': 150},
-  ];
+  ];//TODO MEGH JSON STUFF
 
-  bool showSpending = true; // To toggle between spending and income pie charts
+  bool showSpending = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,6 @@ class _ReportsPageState extends State<ReportsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Toggle button to switch between spending and income pie chart
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -49,13 +47,11 @@ class _ReportsPageState extends State<ReportsPage> {
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: Text(
-                showSpending ? 'Show Income Chart' : 'Show Spending Chart',
+                showSpending ? 'Show Income Report' : 'Show Spending Report',
                 style: const TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(height: 20),
-
-            // Pie chart to show spending or income data
             SizedBox(
               height: 250,
               child: PieChart(
@@ -68,22 +64,19 @@ class _ReportsPageState extends State<ReportsPage> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Title for the top categories list
-            const Text(
-              'Top Spending Categories:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              showSpending ? 'Top Spending Categories:' : 'Top Earning Categories:',
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blue),
             ),
             const SizedBox(height: 10),
-
-            // List of top spending categories
             Expanded(
               child: ListView.builder(
-                itemCount: spendingCategories.length,
+                itemCount: showSpending ? spendingCategories.length : incomeCategories.length,
                 itemBuilder: (context, index) {
+                  final category = showSpending ? spendingCategories[index] : incomeCategories[index];
                   return ListTile(
-                    title: Text(spendingCategories[index]['category'], style: TextStyle(fontSize: 20),),
-                    trailing: Text('\$${spendingCategories[index]['amount']}', style: TextStyle(fontSize: 20),),
+                    title: Text(category['category'], style: const TextStyle(fontSize: 20)),
+                    trailing: Text('\$${category['amount']}', style: const TextStyle(fontSize: 20)),
                   );
                 },
               ),
@@ -94,7 +87,6 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  // Method to generate pie chart sections from a given category list
   List<PieChartSectionData> _generatePieChartSections(List<Map<String, dynamic>> categories) {
     return categories
         .map(
@@ -109,8 +101,7 @@ class _ReportsPageState extends State<ReportsPage> {
         .toList();
   }
 
-  // Method to generate a color for each category
-  Color _getCategoryColor(String category) {
+  Color _getCategoryColor(String category) { //TODO MEGH JSON STUFF
     switch (category) {
       case 'Food':
         return Colors.orange;
