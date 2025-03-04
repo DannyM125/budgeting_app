@@ -4,9 +4,10 @@ import 'transfers_page.dart';
 import 'reports_page.dart';
 import 'account_page.dart';
 import 'utils/transfer_dialog.dart';
+import 'utils/color_utils.dart';
 
 void main() {
-  runApp(BudgetApp());
+  runApp(const BudgetApp());
 }
 
 class BudgetApp extends StatelessWidget {
@@ -19,8 +20,9 @@ class BudgetApp extends StatelessWidget {
       title: 'Budgeting App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        primaryColor: ColorUtils.primaryColor,
       ),
-      home: MainScreen(),
+      home: const MainScreen(),
     );
   }
 }
@@ -34,19 +36,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  final Color primaryColor = Colors.blue;
-
-  final TextEditingController _amountController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-  DateTime? _selectedDate;
-  String _transactionType = 'Withdrawal';
 
   final List<Widget> _pages = [
-    HomePage(),
-    TransfersPage(),
-    HomePage(), // this is never actually used just a filler for the array
-    ReportsPage(),
-    AccountPage(),
+    const HomePage(),
+    const TransfersPage(),
+    const HomePage(), // this is never actually used just a filler for the array
+    const ReportsPage(),
+    const AccountPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -58,74 +54,71 @@ class _MainScreenState extends State<MainScreen> {
   void _showAddTransferDialog() {
     showAddTransferDialog(
       context,
-      _amountController,
-      _categoryController,
-      _selectedDate,
-      _transactionType,
-      (newType) {
-        setState(() {
-          _transactionType = newType;
-        });
-      },
-      (newDate) {
-        setState(() {
-          _selectedDate = newDate;
-        });
-      },
+      TextEditingController(),
+      TextEditingController(),
+      null,
+      'Withdrawal',
+      (newType) {},
+      (newDate) {},
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          if (index == 2) {
-            _showAddTransferDialog(); // UPDATED HERE
-          } else {
-            _onItemTapped(index);
-          }
-        },
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Transfers',
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue,
-              ),
-              padding: const EdgeInsets.all(10),
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 42,
-              ),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: _pages[_selectedIndex],
+    bottomNavigationBar: ValueListenableBuilder<Color>(
+      valueListenable: ColorUtils.primaryColorNotifier,
+      builder: (context, primaryColor, child) {
+        return BottomNavigationBar(
+          backgroundColor: Colors.white,
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            if (index == 2) {
+              _showAddTransferDialog();
+            } else {
+              _onItemTapped(index);
+            }
+          },
+          selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.grey,
+          items: [
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-            label: '',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Reports',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-      ),
-    );
-  }
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.swap_horiz),
+              label: 'Transfers',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: primaryColor,
+                ),
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 42,
+                ),
+              ),
+              label: '',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart),
+              label: 'Reports',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Account',
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
+        );
+      },
+    ),
+  );
+}
 }

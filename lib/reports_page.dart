@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'utils/color_utils.dart';
+
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -45,7 +47,7 @@ class _ReportsPageState extends State<ReportsPage> {
                   showSpending = !showSpending;
                 });
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              style: ElevatedButton.styleFrom(backgroundColor: ColorUtils.primaryColor),
               child: Text(
                 showSpending ? 'Show Income Report' : 'Show Spending Report',
                 style: const TextStyle(color: Colors.white),
@@ -66,7 +68,7 @@ class _ReportsPageState extends State<ReportsPage> {
             const SizedBox(height: 20),
             Text(
               showSpending ? 'Top Spending Categories:' : 'Top Earning Categories:',
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blue),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: ColorUtils.primaryColor),
             ),
             const SizedBox(height: 10),
             Expanded(

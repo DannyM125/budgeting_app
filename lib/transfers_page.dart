@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'utils/transfer_dialog.dart'; // Import the utility file
+import 'utils/transfer_dialog.dart';
+import 'utils/color_utils.dart';
 
 class TransfersPage extends StatefulWidget {
   const TransfersPage({super.key});
@@ -50,7 +51,7 @@ class _TransfersPageState extends State<TransfersPage> {
                   (date) => setState(() => _selectedDate = date),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: ColorUtils.primaryColor,
                   elevation: 4,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
@@ -68,7 +69,7 @@ class _TransfersPageState extends State<TransfersPage> {
                   (date) => setState(() => _selectedDate = date),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: ColorUtils.primaryColor,
                   elevation: 4,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),

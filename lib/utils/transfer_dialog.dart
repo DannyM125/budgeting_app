@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'color_utils.dart';
 
 void showAddTransferDialog(
   BuildContext context,
@@ -81,7 +82,7 @@ void showAddTransferDialog(
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue, // Blue background for save button
+            backgroundColor: ColorUtils.primaryColor, // Blue background for save button
           ),
           child: const Text(
             'Save',

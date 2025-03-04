@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'utils/color_utils.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,7 +30,7 @@ class HomePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(60),
                 border: Border.all(
                   width: 6,
-                  color: Colors.blue, // Border color can be adjusted
+                  color: ColorUtils.primaryColor, // Border color can be adjusted
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -110,12 +112,12 @@ class HomePage extends StatelessWidget {
                           const FlSpot(4, 5000), //TODO MEGH JSON STUFF
                         ],
                         isCurved: false,
-                        color: Colors.blue,
+                        color: ColorUtils.primaryColor,
                         barWidth: 4,
                         isStrokeCapRound: true,
                         belowBarData: BarAreaData(
                           show: true,
-                          color: Colors.blue.withOpacity(0.2),
+                          color: ColorUtils.primaryColor.withOpacity(0.2),
                         ),
                       ),
                     ],
