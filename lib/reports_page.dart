@@ -1,5 +1,5 @@
 import 'package:budget_app/utils/SharedPreferences/category.dart';
-import 'package:budget_app/utils/global_data.dart';
+import 'package:budget_app/utils/SharedPreferences/shared_prefs_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'utils/color_utils.dart';
@@ -12,6 +12,19 @@ class ReportsPage extends StatefulWidget {
 }
 
 class _ReportsPageState extends State<ReportsPage> {
+  List<Category> spendingCategories = [
+    Category(category: 'Food', amount: 120),
+    Category(category: 'Transportation', amount: 60),
+    Category(category: 'Entertainment', amount: 80),
+    Category(category: 'Bills', amount: 200),
+  ];
+
+  List<Category> incomeCategories = [
+    Category(category: 'Salary', amount: 1000),
+    Category(category: 'Freelance', amount: 300),
+    Category(category: 'Investments', amount: 150),
+  ];
+
   bool showSpending = true;
 
   @override
@@ -20,13 +33,21 @@ class _ReportsPageState extends State<ReportsPage> {
     _loadCategories();
   }
 
+  // Load categories when the page loads
   void _loadCategories() async {
-    await GlobalData.loadCategories();
-    setState(() {});
+    List<Category> loadedSpending = await SharedPrefsHelper.loadCategories(true);
+    List<Category> loadedIncome = await SharedPrefsHelper.loadCategories(false);
+
+    setState(() {
+      spendingCategories = loadedSpending.isNotEmpty ? loadedSpending : spendingCategories;
+      incomeCategories = loadedIncome.isNotEmpty ? loadedIncome : incomeCategories;
+    });
   }
 
+  // Save categories when button is pressed
   void _saveCategories() async {
-    await GlobalData.saveCategories();
+    await SharedPrefsHelper.saveCategories(spendingCategories, true);
+    await SharedPrefsHelper.saveCategories(incomeCategories, false);
   }
 
   @override
@@ -63,8 +84,8 @@ class _ReportsPageState extends State<ReportsPage> {
               child: PieChart(
                 PieChartData(
                   sections: showSpending
-                      ? _generatePieChartSections(GlobalData.spendingCategories)
-                      : _generatePieChartSections(GlobalData.incomeCategories),
+                      ? _generatePieChartSections(spendingCategories)
+                      : _generatePieChartSections(incomeCategories),
                   borderData: FlBorderData(show: false),
                 ),
               ),
@@ -83,12 +104,12 @@ class _ReportsPageState extends State<ReportsPage> {
             Expanded(
               child: ListView.builder(
                 itemCount: showSpending
-                    ? GlobalData.spendingCategories.length
-                    : GlobalData.incomeCategories.length,
+                    ? spendingCategories.length
+                    : incomeCategories.length,
                 itemBuilder: (context, index) {
                   final category = showSpending
-                      ? GlobalData.spendingCategories[index]
-                      : GlobalData.incomeCategories[index];
+                      ? spendingCategories[index]
+                      : incomeCategories[index];
                   return ListTile(
                     title: Text(category.category,
                         style: const TextStyle(fontSize: 20)),
