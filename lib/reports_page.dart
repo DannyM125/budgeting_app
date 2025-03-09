@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-
 import 'utils/color_utils.dart';
+
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -13,71 +11,20 @@ class ReportsPage extends StatefulWidget {
 }
 
 class _ReportsPageState extends State<ReportsPage> {
-  List<Map<String, dynamic>> spendingCategories = [];
-  List<Map<String, dynamic>> incomeCategories = [];
+  final List<Map<String, dynamic>> spendingCategories = [
+    {'category': 'Food', 'amount': 120},
+    {'category': 'Transportation', 'amount': 60},
+    {'category': 'Entertainment', 'amount': 80},
+    {'category': 'Bills', 'amount': 200},
+  ];//TODO MEGH JSON STUFF
+
+  final List<Map<String, dynamic>> incomeCategories = [ 
+    {'category': 'Salary', 'amount': 1000},
+    {'category': 'Freelance', 'amount': 300},
+    {'category': 'Investments', 'amount': 150},
+  ];//TODO MEGH JSON STUFF
+
   bool showSpending = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  @override
-  void dispose() {
-    _saveData();
-    super.dispose();
-  }
-
-  // Load data from SharedPreferences
-  Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      spendingCategories = _getStoredList(prefs, 'spendingCategories', [
-        {'category': 'Food', 'amount': 120},
-        {'category': 'Transportation', 'amount': 60},
-        {'category': 'Entertainment', 'amount': 80},
-        {'category': 'Bills', 'amount': 200},
-      ]);
-      incomeCategories = _getStoredList(prefs, 'incomeCategories', [
-        {'category': 'Salary', 'amount': 1000},
-        {'category': 'Freelance', 'amount': 300},
-        {'category': 'Investments', 'amount': 150},
-      ]);
-    });
-  }
-
-  // Save data to SharedPreferences
-  Future<void> _saveData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('spendingCategories', jsonEncode(spendingCategories));
-    await prefs.setString('incomeCategories', jsonEncode(incomeCategories));
-  }
-
-  // Get stored list from SharedPreferences or default value
-  List<Map<String, dynamic>> _getStoredList(SharedPreferences prefs, String key, List<Map<String, dynamic>> defaultList) {
-    final String? jsonString = prefs.getString(key);
-    if (jsonString != null) {
-      return List<Map<String, dynamic>>.from(jsonDecode(jsonString));
-    }
-    return defaultList;
-  }
-
-  // Update a category by adding a new expense or income
-  void _updateCategory(String type, String categoryName, int amount) {
-    setState(() {
-      List<Map<String, dynamic>> categories = type == 'spending' ? spendingCategories : incomeCategories;
-      int index = categories.indexWhere((category) => category['category'] == categoryName);
-
-      if (index != -1) {
-        categories[index]['amount'] += amount;
-      } else {
-        categories.add({'category': categoryName, 'amount': amount});
-      }
-    });
-
-    _saveData(); // Save immediately after update
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +83,6 @@ class _ReportsPageState extends State<ReportsPage> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _updateCategory('spending', 'Groceries', 50);
-              },
-              child: const Text("Add \$50 to Groceries"),
-            ),
           ],
         ),
       ),
@@ -163,7 +103,7 @@ class _ReportsPageState extends State<ReportsPage> {
         .toList();
   }
 
-  Color _getCategoryColor(String category) {
+  Color _getCategoryColor(String category) { //TODO MEGH JSON STUFF
     switch (category) {
       case 'Food':
         return Colors.orange;
@@ -179,8 +119,6 @@ class _ReportsPageState extends State<ReportsPage> {
         return Colors.yellow;
       case 'Investments':
         return Colors.pink;
-      case 'Groceries':
-        return Colors.brown;
       default:
         return Colors.grey;
     }
