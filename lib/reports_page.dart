@@ -1,7 +1,8 @@
+import 'package:budget_app/utils/SharedPreferences/category.dart';
+import 'package:budget_app/utils/SharedPreferences/shared_prefs_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'utils/color_utils.dart';
-
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -11,20 +12,43 @@ class ReportsPage extends StatefulWidget {
 }
 
 class _ReportsPageState extends State<ReportsPage> {
-  final List<Map<String, dynamic>> spendingCategories = [
-    {'category': 'Food', 'amount': 120},
-    {'category': 'Transportation', 'amount': 60},
-    {'category': 'Entertainment', 'amount': 80},
-    {'category': 'Bills', 'amount': 200},
-  ];//TODO MEGH JSON STUFF
+  List<Category> spendingCategories = [
+    Category(category: 'Food', amount: 120),
+    Category(category: 'Transportation', amount: 60),
+    Category(category: 'Entertainment', amount: 80),
+    Category(category: 'Bills', amount: 200),
+  ];
 
-  final List<Map<String, dynamic>> incomeCategories = [ 
-    {'category': 'Salary', 'amount': 1000},
-    {'category': 'Freelance', 'amount': 300},
-    {'category': 'Investments', 'amount': 150},
-  ];//TODO MEGH JSON STUFF
+  List<Category> incomeCategories = [
+    Category(category: 'Salary', amount: 1000),
+    Category(category: 'Freelance', amount: 300),
+    Category(category: 'Investments', amount: 150),
+  ];
 
   bool showSpending = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  // Load categories when the page loads
+  void _loadCategories() async {
+    List<Category> loadedSpending = await SharedPrefsHelper.loadCategories(true);
+    List<Category> loadedIncome = await SharedPrefsHelper.loadCategories(false);
+
+    setState(() {
+      spendingCategories = loadedSpending.isNotEmpty ? loadedSpending : spendingCategories;
+      incomeCategories = loadedIncome.isNotEmpty ? loadedIncome : incomeCategories;
+    });
+  }
+
+  // Save categories when button is pressed
+  void _saveCategories() async {
+    await SharedPrefsHelper.saveCategories(spendingCategories, true);
+    await SharedPrefsHelper.saveCategories(incomeCategories, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +71,8 @@ class _ReportsPageState extends State<ReportsPage> {
                   showSpending = !showSpending;
                 });
               },
-              style: ElevatedButton.styleFrom(backgroundColor: ColorUtils.primaryColor),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorUtils.primaryColor),
               child: Text(
                 showSpending ? 'Show Income Report' : 'Show Spending Report',
                 style: const TextStyle(color: Colors.white),
@@ -67,21 +92,36 @@ class _ReportsPageState extends State<ReportsPage> {
             ),
             const SizedBox(height: 20),
             Text(
-              showSpending ? 'Top Spending Categories:' : 'Top Earning Categories:',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: ColorUtils.primaryColor),
+              showSpending
+                  ? 'Top Spending Categories:'
+                  : 'Top Earning Categories:',
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: ColorUtils.primaryColor),
             ),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                itemCount: showSpending ? spendingCategories.length : incomeCategories.length,
+                itemCount: showSpending
+                    ? spendingCategories.length
+                    : incomeCategories.length,
                 itemBuilder: (context, index) {
-                  final category = showSpending ? spendingCategories[index] : incomeCategories[index];
+                  final category = showSpending
+                      ? spendingCategories[index]
+                      : incomeCategories[index];
                   return ListTile(
-                    title: Text(category['category'], style: const TextStyle(fontSize: 20)),
-                    trailing: Text('\$${category['amount']}', style: const TextStyle(fontSize: 20)),
+                    title: Text(category.category,
+                        style: const TextStyle(fontSize: 20)),
+                    trailing: Text('\$${category.amount}',
+                        style: const TextStyle(fontSize: 20)),
                   );
                 },
               ),
+            ),
+            ElevatedButton(
+              onPressed: _saveCategories,
+              child: Text('Save Categories'),
             ),
           ],
         ),
@@ -89,21 +129,23 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  List<PieChartSectionData> _generatePieChartSections(List<Map<String, dynamic>> categories) {
+  List<PieChartSectionData> _generatePieChartSections(
+      List<Category> categories) {
     return categories
         .map(
           (category) => PieChartSectionData(
-            value: category['amount'].toDouble(),
-            color: _getCategoryColor(category['category']),
-            title: '${category['category']} \n \$${category['amount']}',
+            value: category.amount,
+            color: _getCategoryColor(category.category),
+            title: '${category.category} \n \$${category.amount}',
             radius: 60,
-            titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+            titleStyle: const TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         )
         .toList();
   }
 
-  Color _getCategoryColor(String category) { //TODO MEGH JSON STUFF
+  Color _getCategoryColor(String category) {
     switch (category) {
       case 'Food':
         return Colors.orange;
